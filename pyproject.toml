@@ -3,6 +3,8 @@ requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
+version = "0.0.1"
+description = "DataTest: Micro library for write unittest-like tests(assertions) for Data Science projects."
 name = "datatest"
 authors = [{name = "Aziz Nadirov", email = "aziznadirov@yahoo.com"}]
 readme = "README.md"
@@ -11,8 +13,6 @@ classifiers = ["License :: OSI Approved :: MIT License",
                 "Development Status :: 4 - Beta",
                 "Intended Audience :: Developers",
                 "Operating System :: OS Independent"]
-
-dynamic = ["version", "description"]
 
 requires-python = ">=3.9,<3.11"
 dependencies = [
