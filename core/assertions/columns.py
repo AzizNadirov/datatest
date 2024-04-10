@@ -37,3 +37,54 @@ class NotInColumnAssertion(BaseAssertion):
             values_in = ", ".join(values_in)
 
         return self.set_failed(f"Column contains values in list: '{values_in}'")
+    
+
+class InColumnAssertion(BaseAssertion):
+    """  """
+    name = "InColumnAssertion"
+
+    def __init__(self, 
+                 column: pd.Series,
+                 values: Union[Sequence, pd.Series]):
+        """ aseerts `column.isin(values).sum() > 0` """
+        self.column = column
+        self.values = values
+
+    def validate(self):
+        valid_dtypes_values = (pd.Series, pd.Index, tuple, list, np.ndarray)
+        if not isinstance(self.column, pd.Series): raise ValidationError("`column` must be type of: pd.Series")
+        if not isinstance(self.values, valid_dtypes_values): 
+            raise ValidationError(f"`values` must be type of: {valid_dtypes_values}")
+
+    def assertion(self) -> bool:
+        if (self.column.isin(self.values)).sum() > 0:
+            return self.set_passed()
+        
+        values_not_in = list(self.column.loc[~self.column.isin(self.values)].unique())
+        if len(values_not_in) > 20:
+            values_not_in = ", ".join(values_not_in[:20]) + ", ..."
+        else:
+            values_not_in = ", ".join(values_not_in)
+
+        return self.set_failed(f"Column does not contain values in list: '{values_not_in}'")
+    
+
+class HasNoDuplicatesAssertion(BaseAssertion):
+    """  """
+    name = "HasNoDuplicatesAssertion"
+
+    def __init__(self, 
+                 column: pd.Series):
+        """ aseerts `column.duplicated().sum() == 0` """
+        self.column = column
+
+    def validate(self):
+        if not isinstance(self.column, pd.Series): raise ValidationError("`column` must be type of: pd.Series")
+
+    def assertion(self) -> bool:
+        if self.column.duplicated().sum() == 0:
+            return self.set_passed()
+        
+        duplicateds = {key: value for key, value in self.column.value_counts().to_dict().items() if value > 1}
+        return self.set_failed(f"Column contains duplicates: \n\t{duplicateds}")
+    

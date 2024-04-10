@@ -13,7 +13,7 @@ from .base import BaseAssertion
 
 
 
-class DFHasColumnsAssertion(BaseAssertion):
+class HasColumnsAssertion(BaseAssertion):
     name = "DFHasColumns"
 
     def __init__(self,
