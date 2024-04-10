@@ -1,7 +1,7 @@
 
 
 
-class TestCase:
-    """ one testing unit """
+class TestPipe:
+    """ Pipe of Sequence assertions """
     def __init__(self):
         pass
