@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from .assertions import BaseAssertion
+from assertions.base import BaseAssertion
 from .exceptions import ValidationError
 
 

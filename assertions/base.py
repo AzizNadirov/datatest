@@ -73,3 +73,31 @@ class PanderaSchemaAssertion(BaseAssertion):
             return self.set_failed(str(e))
         else:
             return self.set_passed()
+
+
+class FnAssertion(BaseAssertion):
+    """ Function Assertion - runs your custom function as assertion """
+    name = "FnAssertion"
+    def __init__(self, fn: callable, *args:tuple, **kwargs: dict):
+        """
+        Assertion will be failed if fn throws any exception, otherwise passed
+        Parameters
+            :param fn: function
+            :param args: tuple - positional args for fn
+            :param kwargs: dict - keyword args for fn
+        """
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+
+    def validate(self):
+        if not callable(self.fn): raise ValidationError("`fn` must be callable")
+
+    def assertion(self) -> bool:
+        try:
+            self.fn(*self.args, **self.kwargs)
+        except Exception as e:
+            msg = f"Assertion Function Failed: '{e}'"
+            return self.set_failed(msg)
+        else:
+            return self.set_passed()
