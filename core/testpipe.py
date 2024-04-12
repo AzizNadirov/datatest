@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from assertions.base import BaseAssertion
 from .exceptions import ValidationError
+import colorama
 
 
 class TestPipe:
@@ -16,11 +17,20 @@ class TestPipe:
         print(f"[{self.name}]: Running assertions")
         for i, assertion in run_result.items():
             if assertion.status == "passed":
-                print(f"\t{i}|{assertion.name}|: [{assertion.status}]")
+                print(colorama.Fore.GREEN + f"\t{i}|{assertion.name}|: [{assertion.status}]")
             else:
-                print(f"\t{i}|{assertion.name}|: [{assertion.status}] -> {assertion.error_message}")
-
-        print(f"Successfully ran [{len([a for a in run_result.values() if a.status == 'passed'])}/{len(run_result)}] assertions")
+                print(colorama.Fore.RED + f"\t{i}|{assertion.name}|: [{assertion.status}] -> {assertion.error_message}")
+        n_passed = len([a for a in run_result.values() if a.status == 'passed'])
+        n_all = len(run_result)
+        n_failed = n_all - n_passed
+        if n_failed == 0:
+            print(colorama.Fore.GREEN + f"Successfully ran [{n_passed}/{n_all}] assertions")
+        
+        elif n_passed > n_failed:
+            print(colorama.Fore.YELLOW + f"Successfully ran [{n_passed}/{n_all}] assertions")
+        
+        else:
+            print(colorama.Fore.RED + f"Successfully ran [{n_passed}/{n_all}] assertions")
 
 
     def __validate(self):

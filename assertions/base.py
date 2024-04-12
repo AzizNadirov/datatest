@@ -36,6 +36,7 @@ class BaseAssertion(ABC):
         pass
 
     def validate(self):
+        """ validation of passed args """
         pass
 
     def run(self) -> bool:
